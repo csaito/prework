@@ -8,10 +8,12 @@ Functionalities
  * [x] Required: User can select from various tip percentage
  * [x] Required: User can set the default tip percentage and people count through a Setting panel
  * [x] Optional: Significantly updated UI
+ * [x] Optional: Adding custom app icon and launch screen
  * [x] Optional: Bill text field is the first responder
  * [x] Optional: App also calculates the bill amount per person, based on an user input
 
-Walkthrough of all user stories:
+Walkthrough of all user stories
+ Gif can be found [here](./WalkThru.gif).
 
 
 # Credits
@@ -27,3 +29,4 @@ Walkthrough of all user stories:
  * TextField/Labels cannot handle more than $999.00 
  * Would like to format the bill entry text automatically for better user experience
  * Would like to center all the currency entry horizontally with $ and amount
+ * Please note: I'm quite famililar with coding and library API design in general.  Focusing on application and UI dev skills for this course.
