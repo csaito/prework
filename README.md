@@ -6,11 +6,11 @@ Functionalities
 
  * [x] Required: User can enter a bill amount and tip and total values will update in real time
  * [x] Required: User can select from various tip percentage
- * [x] Required: User can set the default tip percentage and people count through a Setting panel
+ * [x] Required: User can set some defaults through a Settings panel
  * [x] Optional: Significantly updated UI
  * [x] Optional: Adding custom app icon and launch screen
  * [x] Optional: Bill text field is the first responder
- * [x] Optional: App also calculates the bill amount per person, based on an user input
+ * [x] Optional: App also calculates the bill amount per person
 
 Walkthrough of all user stories
  Gif can be found [here](./WalkThru.gif).
