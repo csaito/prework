@@ -11,6 +11,8 @@ Functionalities
  * [x] Optional: Adding custom app icon and launch screen
  * [x] Optional: Bill text field is the first responder
  * [x] Optional: App also calculates the bill amount per person
+ * [x] Optional: Bill amount is persistant for 5 minutes
+
 
 Walkthrough of all user stories
  Gif can be found [here](./WalkThru.gif).
@@ -26,7 +28,4 @@ Walkthrough of all user stories
 # Limitations
 
  * Layout doesn't auto adjust to a different phone screen size.  
- * TextField/Labels cannot handle more than $999.00 
  * Would like to format the bill entry text automatically for better user experience
- * Would like to center all the currency entry horizontally with $ and amount
- * Please note: I'm quite famililar with coding and library API design in general.  Focusing on application and UI dev skills for this course.
