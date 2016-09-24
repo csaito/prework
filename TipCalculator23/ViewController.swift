@@ -15,13 +15,16 @@ class ViewController: UIViewController, AKPickerViewDelegate, AKPickerViewDataSo
     
     var defaultTipPercentage = -1
     var defaultNumOfPeople   = -1
-
+    
+    var BILL_AMOUNT_INTERVAL_IN_SEC = 60 * 60 * 24 // Remember the previous bill amount for one day
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        self.billField.becomeFirstResponder() // start editing
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(storeActivityData),
+                                                         name:UIApplicationDidEnterBackgroundNotification, object:nil)
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         if (!(self.tipPercentagePicker != nil)) {
@@ -32,13 +35,18 @@ class ViewController: UIViewController, AKPickerViewDelegate, AKPickerViewDataSo
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        checkDefaultsForPickers()
+        setUIDefaultValues()
         self.billField.becomeFirstResponder() // start editing
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        storeActivityData()
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     @IBOutlet weak var billField: UITextField!
@@ -91,7 +99,7 @@ class ViewController: UIViewController, AKPickerViewDelegate, AKPickerViewDataSo
         self.view.addSubview(self.tipPercentagePicker!)
     }
     
-    func checkDefaultsForPickers() {
+    func setUIDefaultValues() {
         let defaults = NSUserDefaults.standardUserDefaults()
         var tipPercentage = defaults.integerForKey("DEFAULT_TIP_PERCENTAGE")
         if (tipPercentage == 0) {
@@ -109,7 +117,30 @@ class ViewController: UIViewController, AKPickerViewDelegate, AKPickerViewDataSo
             defaultNumOfPeople = numOfPeople
             self.numberOfPeoplePicker?.selectItem(numOfPeople - 1)
         }
+        
+        // Bill text - only set if there's no value stored in this ViewController
+        if (billField.text?.characters.count == 0) {
+            let previousTimeInterval = defaults.doubleForKey("LAST_ACTIVATION_UTC")
+            if (previousTimeInterval > 0) {
+                let viewRestartInterval = NSDate().timeIntervalSinceDate(NSDate(timeIntervalSince1970: previousTimeInterval))
+                if (viewRestartInterval < Double(BILL_AMOUNT_INTERVAL_IN_SEC)) {
+                    let previousBill = defaults.doubleForKey("LAST_BILL_AMOUNT")
+                    if (previousBill > 0) {
+                        billField.text = String(format:"%.2f", previousBill)
+                    }
+                }
+            }
+        }
     }
+    
+    func storeActivityData() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setDouble(NSDate().timeIntervalSince1970, forKey: "LAST_ACTIVATION_UTC")
+        defaults.setDouble(Double(billField.text!) ?? 0, forKey: "LAST_BILL_AMOUNT")
+        defaults.synchronize()
+    }
+
+    
     
     // MARK: - AKPickerViewDataSource
     
