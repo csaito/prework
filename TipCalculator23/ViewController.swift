@@ -16,7 +16,7 @@ class ViewController: UIViewController, AKPickerViewDelegate, AKPickerViewDataSo
     var defaultTipPercentage = -1
     var defaultNumOfPeople   = -1
     
-    var BILL_AMOUNT_INTERVAL_IN_SEC = 60 * 60 * 24 // Remember the previous bill amount for one day
+    var BILL_AMOUNT_INTERVAL_IN_SEC = 60 * 5 // Remember the previous bill amount for 5 min
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,9 +62,20 @@ class ViewController: UIViewController, AKPickerViewDelegate, AKPickerViewDataSo
         let total = tip + bill
         let totalPP = total / Double((numberOfPeoplePicker?.selectedItem)! + 1)
         
+        let totalString = NSMutableAttributedString(string: String(format:"$ %.2f", total))
+        totalString.addAttribute(NSFontAttributeName,
+                                   value: UIFont.systemFontOfSize(25.0),
+                                   range: NSRange(location: 0,length: 1))
+        let totalPPString = NSMutableAttributedString(string: String(format:"$ %.2f", totalPP))
+        totalPPString.addAttribute(NSFontAttributeName,
+                                     value: UIFont.systemFontOfSize(25.0),
+                                     range: NSRange(location: 0,length: 1))
+        
         tipLabel.text = String(format:"+ %.2f", tip)
-        totalAmount.text = String(format:"%.2f", total)
-        totalPerPersonLabel.text = String(format:"%.2f", totalPP)
+        //totalAmount.text = String(format:"%.2f", total)
+        //totalPerPersonLabel.text = String(format:"%.2f", totalPP)
+        totalAmount.attributedText = totalString
+        totalPerPersonLabel.attributedText = totalPPString
     }
  
     func setupPickerViews() {
@@ -127,6 +138,7 @@ class ViewController: UIViewController, AKPickerViewDelegate, AKPickerViewDataSo
                     let previousBill = defaults.doubleForKey("LAST_BILL_AMOUNT")
                     if (previousBill > 0) {
                         billField.text = String(format:"%.2f", previousBill)
+                        self.updateUI()
                     }
                 }
             }
